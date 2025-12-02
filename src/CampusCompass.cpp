@@ -1,3 +1,5 @@
+#include <fstream>
+#include <sstream>
 #include "CampusCompass.h"
 
 #include <string>
@@ -9,6 +11,35 @@ CampusCompass::CampusCompass() {
 }
 
 bool CampusCompass::ParseCSV(const string &edges_filepath, const string &classes_filepath) {
+    std::ifstream edges_file(edges_filepath);
+    if(!edges_file.is_open()) {
+        return false; // failed to open edges file
+    }
+
+    string line;
+    getline(edges_file, line); // skip header
+
+    while(getline(edges_file, line)) {
+        string locId1;
+        string locId2;
+        string name1;
+        string name2;
+        string time;
+        stringstream ss(line);
+
+        getline(ss, locId1, ',');   
+        getline(ss, locId2, ',');
+        getline(ss, name1, ',');
+        getline(ss, name2, ',');
+        getline(ss, time, ',');
+
+        int id1 = stoi(locId1);
+        int id2 = stoi(locId2);
+        int travel_time = stoi(time);
+
+        
+    }
+
     // return boolean based on whether parsing was successful or not
     return true;
 }

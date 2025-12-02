@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "Graph.h"
+#include "StudentManager.h"
 
 using namespace std;
 
@@ -7,6 +9,7 @@ class CampusCompass {
 private:
     // Think about what member variables you need to initialize
     // perhaps some graph representation?
+    Graph campusGraph;
 public:
     // Think about what helper functions you will need in the algorithm
     CampusCompass(); // constructor
