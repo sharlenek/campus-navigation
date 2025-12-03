@@ -22,6 +22,7 @@ include_directories(src)
 add_executable(Main
         src/main.cpp # your main file
         src/CampusCompass.cpp
+        src/Graph.cpp
         src/CampusCompass.h
         # add your own header files below - should be automatically added in CLion
         # example (can also separate with newlines):
@@ -32,6 +33,7 @@ add_executable(Main
 add_executable(Tests
         test/test.cpp # your test file
         src/CampusCompass.cpp
+        src/Graph.cpp
         src/CampusCompass.h
         # add your own header files below - should be automatically added in CLion
         # example (can also separate with newlines):
