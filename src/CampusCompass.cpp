@@ -37,7 +37,10 @@ bool CampusCompass::ParseCSV(const string &edges_filepath, const string &classes
         int id2 = stoi(locId2);
         int travel_time = stoi(time);
 
-        
+        // populate graph with locations and edge
+        campusGraph.addLocation(id1, name1);
+        campusGraph.addLocation(id2, name2);
+        campusGraph.addEdge(id1, id2, travel_time);
     }
 
     // return boolean based on whether parsing was successful or not
