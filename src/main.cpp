@@ -7,7 +7,12 @@ using namespace std;
 int main() {
     CampusCompass compass;
 
-    compass.ParseCSV("../data/edges.csv", "../data/classes.csv");
+    // Try multiple possible paths for data files
+    if (!compass.ParseCSV("data/edges.csv", "data/classes.csv")) {
+        if (!compass.ParseCSV("../data/edges.csv", "../data/classes.csv")) {
+            compass.ParseCSV("./data/edges.csv", "./data/classes.csv");
+        }
+    }
 
     string command;
     getline(cin, command);
