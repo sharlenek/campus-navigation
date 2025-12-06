@@ -159,3 +159,46 @@ int Graph::mstCost(const std::unordered_set<int> &vertices) const {
     }
     return total;
 }
+
+int Graph::shortestPathWithRoute(int src, int dst, std::vector<int>& route) const {
+    route.clear();
+    if (adj.find(src) == adj.end() || adj.find(dst) == adj.end()) return -1;
+    
+    const int INF = std::numeric_limits<int>::max();
+    unordered_map<int, int> dist;
+    unordered_map<int, int> parent;
+    using P = pair<int,int>;
+    priority_queue<P, vector<P>, greater<P>> pq;
+
+    for (const auto &kv : adj) dist[kv.first] = INF;
+    dist[src] = 0;
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        auto [d,u] = pq.top(); pq.pop();
+        if (d != dist[u]) continue;
+        if (u == dst) break;
+        for (const auto &e : adj.at(u)) {
+            if (!e.open) continue;
+            int nd = d + e.weight;
+            if (nd < dist[e.to]) {
+                dist[e.to] = nd;
+                parent[e.to] = u;
+                pq.push({nd, e.to});
+            }
+        }
+    }
+
+    if (dist[dst] == INF) return -1;
+    
+    // Reconstruct path
+    int cur = dst;
+    while (cur != src) {
+        route.push_back(cur);
+        cur = parent[cur];
+    }
+    route.push_back(src);
+    reverse(route.begin(), route.end());
+    
+    return dist[dst];
+}

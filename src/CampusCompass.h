@@ -10,6 +10,7 @@ private:
     // Think about what member variables you need to initialize
     // perhaps some graph representation?
     Graph campusGraph;
+    StudentManager studentManager;
 public:
     // Think about what helper functions you will need in the algorithm
     CampusCompass(); // constructor

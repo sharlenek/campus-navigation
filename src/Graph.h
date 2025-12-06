@@ -30,4 +30,6 @@ public:
     int mstCost(const std::unordered_set<int>& vertices) const;
 
     const std::string& getLocationName(int id) const { return names.at(id); }
+    bool hasLocation(int id) const { return names.find(id) != names.end(); }
+    int shortestPathWithRoute(int src, int dst, std::vector<int>& route) const;
 };
