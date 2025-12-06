@@ -36,13 +36,13 @@ bool CampusCompass::ParseCSV(const string &edges_filepath, const string &classes
         int id2 = stoi(locId2);
         int travel_time = stoi(time);
 
-        // populate graph with locations and edge
+        // add locations and edge
         campusGraph.addLocation(id1, name1);
         campusGraph.addLocation(id2, name2);
         campusGraph.addEdge(id1, id2, travel_time);
     }
 
-    // Parse classes file
+    // parse classes file
     std::ifstream classes_file(classes_filepath);
     if(!classes_file.is_open()) {
         return false;
@@ -63,8 +63,8 @@ bool CampusCompass::ParseCSV(const string &edges_filepath, const string &classes
         getline(ss, endTimeStr, ',');
 
         int locationId = stoi(locIdStr);
-        
-        // Parse time HH:MM to minutes
+    
+        // parse time to minutes
         int startHour = stoi(startTimeStr.substr(0, 2));
         int startMin = stoi(startTimeStr.substr(3, 2));
         int startMinutes = startHour * 60 + startMin;
@@ -85,20 +85,19 @@ bool CampusCompass::ParseCommand(const string &command) {
     ss >> cmd;
     
     if (cmd == "insert") {
-        // insert "STUDENT_NAME" STUDENT_ID RESIDENCE_LOCATION_ID N CLASSCODE_1 ...
         string name;
         string id;
         int residence;
         int n;
         
-        // Extract quoted name
+        // extract  name
         string temp;
         getline(ss, temp, '"'); // skip to first quote
         getline(ss, name, '"'); // get name between quotes
         
         ss >> id >> residence >> n;
         
-        // Validate residence exists
+        // validate residence exists
         if (!campusGraph.hasLocation(residence)) {
             cout << "unsuccessful" << endl;
             return false;
