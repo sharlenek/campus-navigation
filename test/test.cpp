@@ -21,7 +21,9 @@ TEST_CASE("Graph basic connectivity and shortest path", "[graph]") {
 
     g.toggleEdge(1,2);
     REQUIRE(g.edgeStatus(1,2) == "closed");
-    REQUIRE(g.isConnected(1,2) == false);
+    // 1 and 2 are still connected via 3 (path: 1->3->2)
+    REQUIRE(g.isConnected(1,2) == true);
+    // Shortest path is now the direct edge 1->3
     REQUIRE(g.shortestPath(1,3) == 20); // now direct edge
 
     g.toggleEdge(1,2);
