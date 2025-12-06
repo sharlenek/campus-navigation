@@ -1,12 +1,12 @@
 /*
-// Unit tests for Graph
+// unit tests for graph
 #include <catch2/catch_test_macros.hpp>
 #include "../src/Graph.h"
 #include "../src/StudentManager.h"
 #include "../src/CampusCompass.h"
 #include <sstream>
 
-TEST_CASE("Graph basic connectivity and shortest path", "[graph]") {
+TEST_CASE("graph basic connectivity and shortest path", "[graph]") {
     Graph g;
     g.addLocation(1, "A");
     g.addLocation(2, "B");
@@ -22,16 +22,16 @@ TEST_CASE("Graph basic connectivity and shortest path", "[graph]") {
 
     g.toggleEdge(1,2);
     REQUIRE(g.edgeStatus(1,2) == "closed");
-    // 1 and 2 are still connected via 3 (path: 1->3->2)
+    // 1 and 2 are still connected via 3 
     REQUIRE(g.isConnected(1,2) == true);
-    // Shortest path is now the direct edge 1->3
+    // shortest path is now the direct edge 
     REQUIRE(g.shortestPath(1,3) == 20); // now direct edge
 
     g.toggleEdge(1,2);
     REQUIRE(g.edgeStatus(1,2) == "open");
 }
 
-TEST_CASE("Graph MST cost on triangle", "[graph]") {
+TEST_CASE("graph mst cost on triangle", "[graph]") {
     Graph g;
     g.addLocation(1, "A");
     g.addLocation(2, "B");
@@ -43,11 +43,10 @@ TEST_CASE("Graph MST cost on triangle", "[graph]") {
 
     std::unordered_set<int> verts = {1,2,3};
     int cost = g.mstCost(verts);
-    // MST should pick edges weight 3 and 4 = 7
     REQUIRE(cost == 7);
 }
 
-TEST_CASE("Shortest path unreachable returns -1", "[graph]") {
+TEST_CASE("shortest path unreachable returns -1", "[graph]") {
     Graph g;
     g.addLocation(1, "A");
     g.addLocation(2, "B");
@@ -56,7 +55,7 @@ TEST_CASE("Shortest path unreachable returns -1", "[graph]") {
     REQUIRE(g.shortestPath(1,4) == -1);
 }
 
-TEST_CASE("Graph hasLocation works correctly", "[graph]") {
+TEST_CASE("graph haslocation works correctly", "[graph]") {
     Graph g;
     g.addLocation(1, "A");
     g.addLocation(2, "B");
@@ -66,7 +65,7 @@ TEST_CASE("Graph hasLocation works correctly", "[graph]") {
     REQUIRE(g.hasLocation(99) == false);
 }
 
-TEST_CASE("Graph shortestPathWithRoute returns correct path", "[graph]") {
+TEST_CASE("graph shortestpathwithroute returns correct path", "[graph]") {
     Graph g;
     g.addLocation(1, "A");
     g.addLocation(2, "B");
@@ -84,7 +83,7 @@ TEST_CASE("Graph shortestPathWithRoute returns correct path", "[graph]") {
     REQUIRE(route[2] == 3);
 }
 
-TEST_CASE("Graph edgeStatus returns DNE for non-existent edge", "[graph]") {
+TEST_CASE("graph edgestatus returns dne for non-existent edge", "[graph]") {
     Graph g;
     g.addLocation(1, "A");
     g.addLocation(2, "B");
@@ -93,41 +92,41 @@ TEST_CASE("Graph edgeStatus returns DNE for non-existent edge", "[graph]") {
     REQUIRE(g.edgeStatus(1, 99) == "DNE");
 }
 
-TEST_CASE("StudentManager validates UFID correctly", "[student]") {
+TEST_CASE("studentmanager validates ufid correctly", "[student]") {
     StudentManager sm;
     sm.addClassInfo("COP3530", 14, 640, 690);
     
-    // Valid 8-digit ID
+    // valid 8-digit id
     REQUIRE(sm.insertStudent("John Doe", "12345678", 1, {"COP3530"}) == true);
     
-    // Invalid: too short
+    // invalid: too short
     REQUIRE(sm.insertStudent("Jane Doe", "1234567", 1, {"COP3530"}) == false);
     
-    // Invalid: too long
+    // invalid: too long
     REQUIRE(sm.insertStudent("Jack Doe", "123456789", 1, {"COP3530"}) == false);
     
-    // Invalid: contains letters
+    // invalid: contains letters
     REQUIRE(sm.insertStudent("Jill Doe", "1234567A", 1, {"COP3530"}) == false);
 }
 
-TEST_CASE("StudentManager validates name correctly", "[student]") {
+TEST_CASE("studentmanager validates name correctly", "[student]") {
     StudentManager sm;
     sm.addClassInfo("COP3530", 14, 640, 690);
     
-    // Valid name with space
+    // valid name with space
     REQUIRE(sm.insertStudent("John Doe", "12345678", 1, {"COP3530"}) == true);
     
-    // Invalid: contains numbers
+    // invalid: contains numbers
     REQUIRE(sm.insertStudent("John123", "87654321", 1, {"COP3530"}) == false);
     
-    // Invalid: contains special characters
+    // invalid: contains special characters
     REQUIRE(sm.insertStudent("John-Doe", "11111111", 1, {"COP3530"}) == false);
     
-    // Invalid: empty name
+    // invalid: empty name
     REQUIRE(sm.insertStudent("", "22222222", 1, {"COP3530"}) == false);
 }
 
-TEST_CASE("StudentManager rejects duplicate UFID", "[student]") {
+TEST_CASE("studentmanager rejects duplicate ufid", "[student]") {
     StudentManager sm;
     sm.addClassInfo("COP3530", 14, 640, 690);
     sm.addClassInfo("COP3502", 23, 575, 625);
@@ -136,37 +135,37 @@ TEST_CASE("StudentManager rejects duplicate UFID", "[student]") {
     REQUIRE(sm.insertStudent("Jane Doe", "12345678", 1, {"COP3502"}) == false);
 }
 
-TEST_CASE("StudentManager dropClass removes student when no classes remain", "[student]") {
+TEST_CASE("studentmanager dropclass removes student when no classes remain", "[student]") {
     StudentManager sm;
     sm.addClassInfo("COP3530", 14, 640, 690);
     
     sm.insertStudent("John Doe", "12345678", 1, {"COP3530"});
     
-    // Drop the only class
+    // drop the only class
     REQUIRE(sm.dropClass("12345678", "COP3530") == true);
     
-    // Student should be gone
+    // student should be gone
     REQUIRE(sm.getStudent("12345678") == nullptr);
 }
 
-TEST_CASE("StudentManager dropClass keeps student with remaining classes", "[student]") {
+TEST_CASE("studentmanager dropclass keeps student with remaining classes", "[student]") {
     StudentManager sm;
     sm.addClassInfo("COP3530", 14, 640, 690);
     sm.addClassInfo("COP3502", 23, 575, 625);
     
     sm.insertStudent("John Doe", "12345678", 1, {"COP3530", "COP3502"});
     
-    // Drop one class
+    // drop one class
     REQUIRE(sm.dropClass("12345678", "COP3530") == true);
     
-    // Student should still exist
+    // student should still exist
     const Student* s = sm.getStudent("12345678");
     REQUIRE(s != nullptr);
     REQUIRE(s->classes.size() == 1);
     REQUIRE(s->classes.count("COP3502") == 1);
 }
 
-TEST_CASE("StudentManager replaceClass validates conditions", "[student]") {
+TEST_CASE("studentmanager replaceclass validates conditions", "[student]") {
     StudentManager sm;
     sm.addClassInfo("COP3530", 14, 640, 690);
     sm.addClassInfo("COP3502", 23, 575, 625);
@@ -174,20 +173,20 @@ TEST_CASE("StudentManager replaceClass validates conditions", "[student]") {
     
     sm.insertStudent("John Doe", "12345678", 1, {"COP3530", "COP3502"});
     
-    // Valid replacement
+    // valid replacement
     REQUIRE(sm.replaceClass("12345678", "COP3530", "CDA3101") == true);
     
-    // Can't replace with class already enrolled in
+    // can't replace with class already enrolled in
     REQUIRE(sm.replaceClass("12345678", "CDA3101", "COP3502") == false);
     
-    // Can't replace class student doesn't have
+    // can't replace class student doesn't have
     REQUIRE(sm.replaceClass("12345678", "COP3530", "COP3502") == false);
     
-    // Can't replace with non-existent class
+    // can't replace with non-existent class
     REQUIRE(sm.replaceClass("12345678", "COP3502", "FAKE999") == false);
 }
 
-TEST_CASE("StudentManager removeClassFromAll counts correctly", "[student]") {
+TEST_CASE("studentmanager removeclassfromall counts correctly", "[student]") {
     StudentManager sm;
     sm.addClassInfo("COP3530", 14, 640, 690);
     sm.addClassInfo("COP3502", 23, 575, 625);
@@ -196,22 +195,22 @@ TEST_CASE("StudentManager removeClassFromAll counts correctly", "[student]") {
     sm.insertStudent("Student B", "22222222", 1, {"COP3530"});
     sm.insertStudent("Student C", "33333333", 1, {"COP3502"});
     
-    // Remove COP3530 should affect 2 students
+    // remove cop3530 should affect 2 students
     REQUIRE(sm.removeClassFromAll("COP3530") == 2);
     
-    // Student B should be removed (only had COP3530)
+    // student b should be removed (only had cop3530)
     REQUIRE(sm.getStudent("22222222") == nullptr);
     
-    // Student A should still exist with COP3502
+    // student a should still exist with cop3502
     const Student* sA = sm.getStudent("11111111");
     REQUIRE(sA != nullptr);
     REQUIRE(sA->classes.size() == 1);
     
-    // Student C unaffected
+    // student c unaffected
     REQUIRE(sm.getStudent("33333333") != nullptr);
 }
 
-TEST_CASE("StudentManager getSortedClasses returns alphabetical order", "[student]") {
+TEST_CASE("studentmanager getsortedclasses returns alphabetical order", "[student]") {
     StudentManager sm;
     sm.addClassInfo("COP3530", 14, 640, 690);
     sm.addClassInfo("CDA3101", 14, 705, 755);
@@ -226,15 +225,15 @@ TEST_CASE("StudentManager getSortedClasses returns alphabetical order", "[studen
     REQUIRE(classes[2] == "MAC2311");
 }
 
-TEST_CASE("CampusCompass ParseCSV loads data correctly", "[integration]") {
+TEST_CASE("campuscompass parsecsv loads data correctly", "[integration]") {
     CampusCompass compass;
     
-    // Assuming the data files exist
+    // assuming the data files exist
     bool result = compass.ParseCSV("../data/edges.csv", "../data/classes.csv");
     REQUIRE(result == true);
 }
 
-TEST_CASE("Graph MST with closed edges", "[graph]") {
+TEST_CASE("graph mst with closed edges", "[graph]") {
     Graph g;
     g.addLocation(1, "A");
     g.addLocation(2, "B");
@@ -246,18 +245,18 @@ TEST_CASE("Graph MST with closed edges", "[graph]") {
     g.addEdge(3, 4, 3);
     g.addEdge(1, 4, 10);
     
-    // Close an edge
+    // close an edge
     g.toggleEdge(2, 3);
     
     std::unordered_set<int> verts = {1, 2, 3, 4};
     int cost = g.mstCost(verts);
     
-    // MST should use edges 1-2 (1), 1-4 (10), 3-4 (3) = 14
+    // mst should use edges 1-2 (1), 1-4 (10), 3-4 (3) = 14
     // (can't use 2-3 because it's closed)
     REQUIRE(cost == 14);
 }
 
-TEST_CASE("Graph shortest path respects closed edges", "[graph]") {
+TEST_CASE("graph shortest path respects closed edges", "[graph]") {
     Graph g;
     g.addLocation(1, "A");
     g.addLocation(2, "B");
@@ -267,13 +266,79 @@ TEST_CASE("Graph shortest path respects closed edges", "[graph]") {
     g.addEdge(2, 3, 5);
     g.addEdge(1, 3, 20);
     
-    // Normal path is 1->2->3 = 10
+    // normal path is 1->2->3 = 10
     REQUIRE(g.shortestPath(1, 3) == 10);
     
-    // Close edge 2-3
+    // close edge 2-3
     g.toggleEdge(2, 3);
     
-    // Now must use direct edge 1->3 = 20
+    // now must use direct edge 1->3 = 20
     REQUIRE(g.shortestPath(1, 3) == 20);
 }
+
+TEST_CASE("graph addlocation does not overwrite name", "[graph]") {
+    Graph g;
+    g.addLocation(100, "first");
+    g.addLocation(100, "second");
+    REQUIRE(g.getLocationName(100) == "first");
+}
+
+TEST_CASE("graph mstcost returns -1 for disconnected vertices", "[graph]") {
+    Graph g;
+    g.addLocation(1, "A");
+    g.addLocation(2, "B");
+    g.addEdge(1,2,5);
+    g.addLocation(99, "Z");
+    std::unordered_set<int> verts = {1,2,99};
+    REQUIRE(g.mstCost(verts) == -1);
+}
+
+TEST_CASE("studentmanager insert fails for unknown class", "[student]") {
+    StudentManager sm;
+    sm.addClassInfo("COP3502", 23, 575, 625);
+    REQUIRE(sm.insertStudent("Alice", "12345678", 1, {"FAKE101"}) == false);
+}
+
+TEST_CASE("campuscompass toggle and check edge status via parsecommand", "[integration]") {
+    CampusCompass c;
+    REQUIRE(c.ParseCSV("../data/edges.csv", "../data/classes.csv"));
+
+    std::ostringstream oss;
+    auto* oldbuf = std::cout.rdbuf(oss.rdbuf());
+    bool ok = c.ParseCommand("toggleEdgesClosure 1 1 2");
+    std::cout.rdbuf(oldbuf);
+    REQUIRE(ok == true);
+    REQUIRE(oss.str().find("successful") != std::string::npos);
+
+    oss.str(""); oss.clear();
+    oldbuf = std::cout.rdbuf(oss.rdbuf());
+    ok = c.ParseCommand("checkEdgeStatus 1 2");
+    std::cout.rdbuf(oldbuf);
+    REQUIRE(ok == true);
+    REQUIRE(oss.str().find("closed") != std::string::npos);
+
+    // toggle back so other tests not affected
+    c.ParseCommand("toggleEdgesClosure 1 1 2");
+}
+
+TEST_CASE("campuscompass insert and remove student via parsecommand", "[integration]") {
+    CampusCompass c;
+    REQUIRE(c.ParseCSV("../data/edges.csv", "../data/classes.csv"));
+
+    std::ostringstream oss;
+    auto* oldbuf = std::cout.rdbuf(oss.rdbuf());
+    bool ok = c.ParseCommand("insert \"Test Student\" 99999999 1 1 COP3530");
+    std::cout.rdbuf(oldbuf);
+    REQUIRE(ok == true);
+    REQUIRE(oss.str().find("successful") != std::string::npos);
+
+    oss.str(""); oss.clear();
+    oldbuf = std::cout.rdbuf(oss.rdbuf());
+    ok = c.ParseCommand("remove 99999999");
+    std::cout.rdbuf(oldbuf);
+    REQUIRE(ok == true);
+    REQUIRE(oss.str().find("successful") != std::string::npos);
+}
+
+
 */
