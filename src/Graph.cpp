@@ -144,7 +144,6 @@ int Graph::mstCost(const std::unordered_set<int> &vertices) const {
     while (!pq.empty() && visited.size() < V.size()) {
         auto item = pq.top(); pq.pop();
         int w = item.first;
-        int u = item.second.first;
         int v = item.second.second;
         if (visited.find(v) != visited.end()) continue;
         // add v
